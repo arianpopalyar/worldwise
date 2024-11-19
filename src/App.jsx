@@ -1,50 +1,43 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Product from "./pages/product";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import Pricing from "./pages/Pricing";
 import PageNotFound from "./pages/PageNotFound";
+import AppLayout from './pages/AppLayout';
 import CityList from "./components/CityList";
-import { useEffect, useState } from "react";
-const BASE_URL = "http://localhost:8000";
-function App() {
-  const [cities, setCities] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+import City from "./components/City";
+import CountryList from "./components/CountryList";
+import { CitiesProvider } from "./Contexts/CitiesContext";
 
-  useEffect(function () {
-    async function fetchCities() {
-      try {
-        setLoading(true);
-        const res = await fetch(`${BASE_URL}/cities`);
-        const data = await res.json();
-        setCities(data);
-      } catch {
-        alert("there was an error..");
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchCities();
-  }, []);
+function App() {
   return (
+    <CitiesProvider>
     <BrowserRouter>
       <Routes>
         <Route index element={<HomePage />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="product" element={<Product />} />
+        <Route path="pricing" element={<Pricing />} />
+        <Route path="login" element={<Login />} />
         <Route path="*" element={<PageNotFound />} />
-        <Route path="app" element={<PageNotFound />}>
+        <Route path="app" element={<AppLayout />}>
+          <Route index element={<Navigate replace to="cities"/>} />
           <Route
             path="cities"
-            element={<CityList cities={cities} isloading={isLoading} />}
+            element={<CityList/>}
           />
-          <Route index element={<CityList />} />
-          <Route path="countreis" element={<p>List of coutntries</p>} />
+          <Route
+            path="countries"
+            element={<CountryList/>}
+          />
+          <Route path="cities/:id" element={<City/>}/>
+          
+          <Route path="countries" element={<p>List of coutntries</p>} />
           <Route path="from" element={<p>From</p>} />
         </Route>
       </Routes>
     </BrowserRouter>
+    </CitiesProvider>
   );
 }
 
