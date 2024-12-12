@@ -2,11 +2,17 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const BASE_URL = "http://localhost:8000";
 const CitiesContext = createContext();
-
+// const initialState = {
+//     cities: [],
+//     isLoading: false,
+//     currentCity: {},
+//     error: "",
+//   };
 function CitiesProvider({children}){
     const [cities, setCities] = useState([]);
-  const [isLoading, setLoading] = useState(false);
-
+    const [isLoading, setLoading] = useState(false);
+    const [currentCity, setCurrentCity]= useState({});
+    
   useEffect(function () {
     async function fetchCities() {
       try {
@@ -23,17 +29,37 @@ function CitiesProvider({children}){
     fetchCities();
   }, []);
 
-  return (
-    <CitiesContext.Provider value={{cities,isLoading}}>
-        {children}
+  async function getCity(id) {
+    try {
+        setLoading(true);
+        const res = await fetch(`${BASE_URL}/cities/${id}`);
+        const data = await res.json();
+        setCurrentCity(data);
+      } catch {
+        alert("there was an error..");
+      } finally {
+        setLoading(false);
+      }
+    
+  }
 
+  return (
+    <CitiesContext.Provider 
+    value={{
+        cities,
+        isLoading,
+        currentCity,
+        getCity
+    }}>
+        {children}
     </CitiesContext.Provider>
   )
 }
 
-function useCities(){
+function useCities() {
     const context = useContext(CitiesContext);
-    if(context === undefined) throw error('CitiesContext was used ouside the Cities Provider')
+    if(context === undefined) 
+        throw Error('CitiesContext was used outside the Cities Provider')
     return context;
 }
 

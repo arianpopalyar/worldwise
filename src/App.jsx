@@ -8,7 +8,7 @@ import AppLayout from './pages/AppLayout';
 import CityList from "./components/CityList";
 import City from "./components/City";
 import CountryList from "./components/CountryList";
-import { CitiesProvider } from "./Contexts/CitiesContext";
+import { CitiesProvider } from "./contexts/CitiesContext";
 
 function App() {
   return (
