@@ -8,7 +8,7 @@ function CityList() {
   const { cities, isLoading } = useCities();
   if (isLoading) return <Spinner />;
 
-  if (!cities.length) return <Message message="Add you first city" />;
+  if (!cities.length) return <Message message="Add you first city" />
 
   return (
     <ul className={styles.cityList}>

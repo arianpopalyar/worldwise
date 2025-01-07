@@ -5,8 +5,9 @@ import { MapContainer,TileLayer,Marker,Popup, useMapEvent, useMap } from "react-
 import { useGeolocation } from "../hooks/useGeoLocation";
 import Button from "./Button";
 import { useEffect, useState } from "react";
-import { useCities } from '../contexts/CitiesContext';
+
 import { useUrlPosition } from "../hooks/useUrlPosition";
+import { useCities } from "../contexts/CitiesContext";
 function Map() {
   
   const {cities} = useCities();
@@ -24,7 +25,7 @@ function Map() {
     function(){
       if(mapLat && mapLng) setMapPosition([mapLat,mapLng])
       },
-    [mapLat,mapLng]
+    [mapLat, mapLng]
   );
 
   useEffect(
